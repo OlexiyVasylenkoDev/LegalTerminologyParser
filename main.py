@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -14,6 +15,7 @@ dp = Dispatcher(bot=bot)
 async def start_handler(message: types.Message):
     user_id = message.from_user.id
     name = message.from_user.full_name
+    logging.info(f"{user_id} {name} {time.asctime()}")
 
     await message.reply(f"Hello, {name}")
 
