@@ -10,7 +10,7 @@ from aiogram.types import ReplyKeyboardRemove, \
 from aiogram.utils.markdown import hlink, link
 from dotenv import load_dotenv
 
-from oop_parser import Parser, SingleExactMatch, PageIsNotAccessible, TermNotFound
+from oop_parser import Parser, SingleExactMatch, PageNotAccessible, TermNotFound
 
 load_dotenv()
 
@@ -61,7 +61,7 @@ async def handler(message: types.Message):
         parser = SingleExactMatch(message=message.text)
         for i in parser.parse():
             await bot.send_message(chat_id=user_id, text=hlink(i[1][0], i[1][1]), parse_mode="HTML")
-    except (PageIsNotAccessible, TermNotFound) as e:
+    except (PageNotAccessible, TermNotFound) as e:
         await bot.send_message(chat_id=user_id, text=str(e))
 
 if __name__ == "__main__":

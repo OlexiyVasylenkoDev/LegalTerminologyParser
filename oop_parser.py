@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from requests import Response
 
 
-class PageIsNotAccessible(Exception):
+class PageNotAccessible(Exception):
     def __init__(self, status_code: int, response: Response):
         self._status_code = status_code
         self._response = response
@@ -30,7 +30,7 @@ class TermNotFound(Exception):
     def __init__(self, term: str):
         self._term = term
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "Sorry, term wasn`t found!"
 
     @property
@@ -47,8 +47,8 @@ class Parser(ABC):
 
     URL = "https://zakon.rada.gov.ua/laws/term?find=1&text="
 
-    SOUP_FOR_SEARCH = "ul.m-3 li a"
-    SOUP_FOR_RETRIEVE_FROM_TERM = "div.card dl"
+    SOUP_FOR_INITIAL_SEARCH = "ul.m-3 li a"
+    SOUP_FOR_RETRIEVING_FROM_TERM = "div.card dl"
 
     def __init__(self, message: str):
         self.message = message
@@ -59,17 +59,17 @@ class Parser(ABC):
     def get_response(self):
         response = requests.get(self.get_url())
         if response.status_code >= 400:
-            raise PageIsNotAccessible(status_code=response.status_code, response=response)
+            raise PageNotAccessible(status_code=response.status_code, response=response)
         return response
 
     def get_url_links(self):
         soup = BeautifulSoup(self.get_response().text, "html.parser")
         links = dict()
-        if not soup.select(self.SOUP_FOR_SEARCH):
+        if not soup.select(self.SOUP_FOR_INITIAL_SEARCH):
             raise TermNotFound(term=self.message)
-        for i in soup.select(self.SOUP_FOR_SEARCH):
+        for i in soup.select(self.SOUP_FOR_INITIAL_SEARCH):
             links[i.text] = i.get("href")
-        return links.items()
+        return links
 
     def exact_match(self):
         return " ".join([i.capitalize() for i in self.message.split(" ")]) in self.get_url_links().keys()
@@ -127,10 +127,10 @@ class Parser(ABC):
 class SingleExactMatch(Parser):
     def parse(self):
         result = dict()
-        for j in list(self.get_url_links()):
+        for j in list(self.get_url_links().items()):
             response = requests.get(j[1])
             soup = BeautifulSoup(response.text, "html.parser")
-            for i in soup.select(self.SOUP_FOR_RETRIEVE_FROM_TERM):
+            for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
                 result[re.sub(r"\xa0", "", i.select_one("div.doc a").text)] = [re.sub("\n", "", i.select_one("p").text),
                                                                                i.select_one("div.doc a").get("href")]
         return result.items()
