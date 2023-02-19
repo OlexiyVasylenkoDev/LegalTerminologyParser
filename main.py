@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import hlink
 from dotenv import load_dotenv
 
+from message_translator import translate_message
 from oop_parser import Parser, PageNotAccessible, TermNotFound, TooManyResults
 
 load_dotenv()
@@ -41,8 +42,9 @@ async def end_handler(message: types.Message):
 async def handler(message: types.Message):
     user_id = message.from_user.id
     try:
-        parser = Parser(message=message.text).router()
+        parser = Parser(message=translate_message(message.text)).router()
         print(parser.__class__.__name__)
+        print(translate_message(message.text))
         for i in parser.parse():
             await bot.send_message(chat_id=user_id,
                                    text=f"{i[1][0]}\n<i>{hlink(i[0], i[1][1])}</i>",

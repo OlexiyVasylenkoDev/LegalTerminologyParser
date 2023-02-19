@@ -60,7 +60,7 @@ class Parser(ABC):
 
     SOUP_FOR_INITIAL_SEARCH = "ul.m-3 li a"
     SOUP_FOR_RETRIEVING_FROM_TERM = "div.card dl"
-    SOUP_FOR_COUNTING_NUMBER_OF_RESULTS = "h2 small b"
+    SOUP_FOR_COUNTING_NUMBER_OF_RESULTS = "h2.mb-0 b"
 
     def __init__(self, message: str):
         self.message = message
@@ -84,7 +84,6 @@ class Parser(ABC):
         return links
 
     def is_exact_match(self) -> bool:
-        print(list(map(lambda x: x.lower(), self.get_url_links().keys())))
         return " ".join([i.capitalize() for i in self.message.split(" ")]).lower() \
                in list(map(lambda x: x.lower(), self.get_url_links().keys()))
 
@@ -105,7 +104,6 @@ class ExactMatch(Parser):
         for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
             result[re.sub(r"\xa0", "", i.select_one("div.doc a").text)] = [re.sub("\n", "", i.select_one("p").text),
                                                                            i.select_one("div.doc a").get("href")]
-        print(result.items())
         return result.items()
 
 
@@ -113,7 +111,8 @@ class PartialMatch(Parser):
     def parse(self):
         result = dict()
         soup = BeautifulSoup(self.get_response().text, "html.parser")
-        if int([i.text for i in soup.select(self.SOUP_FOR_COUNTING_NUMBER_OF_RESULTS)][0]) > 10:
+        number_of_results = soup.select_one(self.SOUP_FOR_COUNTING_NUMBER_OF_RESULTS)
+        if number_of_results is None or int(number_of_results.get_text()) > 10:
             raise TooManyResults(term=self.message)
         for j in list(self.get_url_links().items()):
             response = requests.get(j[1])
@@ -121,5 +120,4 @@ class PartialMatch(Parser):
             for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
                 result[re.sub(r"\xa0", "", i.select_one("div.doc a").text)] = [re.sub("\n", "", i.select_one("p").text),
                                                                                i.select_one("div.doc a").get("href")]
-        # print(result.items())
         return result.items()
