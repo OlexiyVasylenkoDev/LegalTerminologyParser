@@ -45,7 +45,11 @@ async def handler(message: types.Message):
         print(translate_message(message.text))
         if parser.__class__.__name__ == "PartialMatch":
             for i in parser.parse():
-                keyboard.add(InlineKeyboardButton(text=i[0], callback_data="answer"))
+                keyboard.add(InlineKeyboardButton(text=i[0],
+                                                  callback_data="answer",
+                                                  kwargs={"text": i[1][0],
+                                                          "link": hlink(i[0], i[1][1])}))
+                print(keyboard)
             await message.answer("Here are the results:", reply_markup=keyboard)
         else:
             for i in parser.parse():
@@ -57,8 +61,8 @@ async def handler(message: types.Message):
 
 
 @dp.callback_query_handler(text=["answer"])
-async def answer(call):
-    await call.message.answer(call)
+async def answer(call, text, link):
+    await call.message.answer(f"{text}\n<i>{link}</i>")
     await call.answer(call)
 
 
