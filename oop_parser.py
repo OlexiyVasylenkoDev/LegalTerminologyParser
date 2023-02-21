@@ -62,7 +62,6 @@ class ExactMatch(Parser):
         response = requests.get(list(self.get_url_links().items())[0][1])
         soup = BeautifulSoup(response.text, "html.parser")
         for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
-            print(i)
             result[re.sub(r"\xa0", "", i.select_one("div.doc a").text)] = [re.sub("\n", "", i.select_one("p").text),
                                                                            i.select_one("div.doc a").get("href")]
         return result.items()
