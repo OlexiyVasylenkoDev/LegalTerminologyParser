@@ -82,7 +82,7 @@ import sys
 import time
 
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.contrib.fsm_storage.redis import RedisStorage
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from aiogram.utils.callback_data import CallbackData
 from aiogram.utils.markdown import hlink
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -98,7 +98,7 @@ load_dotenv()
 redis = Redis(host="ec2-3-90-82-222.compute-1.amazonaws.com")
 
 bot = Bot(token=os.environ.get("TOKEN"))
-dp = Dispatcher(bot=bot, storage=RedisStorage(redis=redis))
+dp = Dispatcher(bot=bot, storage=RedisStorage2(redis=redis))
 
 button_callback = CallbackData("button", "text")
 
