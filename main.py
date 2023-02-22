@@ -77,16 +77,12 @@
 
 import logging
 import os
-import random
-import sys
 import time
 
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.contrib.fsm_storage.redis import RedisStorage
 from aiogram.utils.callback_data import CallbackData
 from aiogram.utils.markdown import hlink
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from aioredis import Redis
 from dotenv import load_dotenv
 
 from message_translator import translate_message
@@ -95,10 +91,8 @@ from oop_parser import Parser, PageNotAccessible, TermNotFound, TooManyResults
 load_dotenv()
 
 
-redis = Redis(host="ec2-3-90-82-222.compute-1.amazonaws.com")
-
 bot = Bot(token=os.environ.get("TOKEN"))
-dp = Dispatcher(bot=bot, storage=RedisStorage(redis=redis))
+dp = Dispatcher(bot=bot)
 
 button_callback = CallbackData("button", "text")
 
