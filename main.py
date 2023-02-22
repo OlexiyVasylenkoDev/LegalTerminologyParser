@@ -95,7 +95,7 @@ from oop_parser import Parser, PageNotAccessible, TermNotFound, TooManyResults
 load_dotenv()
 
 
-redis = Redis(host="ec2-3-90-82-222.compute-1.amazonaws.com")
+redis = Redis.from_url(url="redis://ec2-3-90-82-222.compute-1.amazonaws.com")
 
 bot = Bot(token=os.environ.get("TOKEN"))
 dp = Dispatcher(bot=bot, storage=RedisStorage2(redis=redis))
