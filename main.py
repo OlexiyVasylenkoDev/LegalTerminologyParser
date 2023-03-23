@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from message_translator import translate_message
 from oop_parser import PageNotAccessible, Parser, TermNotFound, TooManyResults
-from schema import Term, engine
+from schema import Term, engine, Law
 
 load_dotenv()
 
@@ -45,13 +45,23 @@ async def handler(message: types.Message):
         if parser.__class__.__name__ == "PartialMatch":
             for i in parser.parse():
                 definition = f"{i[1][0]}\n<i>{hlink(i[0], i[1][1])}</i>"
+                law_name = i[0]
                 with Session(engine) as session:
                     term = session.query(Term).filter_by(content=definition).first()
+                    law = session.query(Law).filter_by(name=law_name).first()
+                    if law:
+                        current_law = session.query(Law).filter_by(name=law_name).first()
+                        current_law.number_of_mentions += 1
+                        session.commit()
+                    else:
+                        new_law = Law(name=law_name)
+                        session.add(new_law)
+                    session.commit()
                     if term:
                         keyboard.add(InlineKeyboardButton(text=i[0],
                                                           callback_data=term.id))
                     else:
-                        new_term = Term(content=definition, law=i[0])
+                        new_term = Term(content=definition, law=session.query(Law).filter_by(name=i[0]).first())
                         session.add(new_term)
                         session.commit()
                         keyboard.add(InlineKeyboardButton(text=i[0],
@@ -60,13 +70,23 @@ async def handler(message: types.Message):
         else:
             for i in parser.parse():
                 definition = f"{i[1][0]}\n<i>{hlink(i[0], i[1][1])}</i>"
+                law_name = i[0]
                 with Session(engine) as session:
                     term = session.query(Term).filter_by(content=definition).first()
+                    law = session.query(Law).filter_by(name=law_name).first()
+                    if law:
+                        current_law = session.query(Law).filter_by(name=law_name).first()
+                        current_law.number_of_mentions += 1
+                        session.commit()
+                    else:
+                        new_law = Law(name=law_name)
+                        session.add(new_law)
+                    session.commit()
                     if term:
                         keyboard.add(InlineKeyboardButton(text=i[0],
                                                           callback_data=term.id))
                     else:
-                        new_term = Term(content=definition, law=i[0])
+                        new_term = Term(content=definition, law=session.query(Law).filter_by(name=i[0]).first())
                         session.add(new_term)
                         session.commit()
                         keyboard.add(InlineKeyboardButton(text=i[0],

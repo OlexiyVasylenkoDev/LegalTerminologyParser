@@ -1,8 +1,9 @@
+import datetime
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import create_engine, Column, DateTime, Integer, String, ForeignKey
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 load_dotenv()
 
@@ -19,17 +20,19 @@ class Base(DeclarativeBase):
 
 class Law(Base):
     __tablename__ = "Laws"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    terms: Mapped[str]
-    references: Mapped[int]
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    terms = relationship("Term", back_populates="law")
+    number_of_mentions = Column(Integer, default=1)
 
 
 class Term(Base):
     __tablename__ = "Terms"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    content: Mapped[str]
-    law: Mapped[str]
+    id = Column(Integer, primary_key=True)
+    content = Column(String)
+    law_id = Column(Integer, ForeignKey("Laws.id"))
+    law = relationship("Law", back_populates="terms")
+    date_created = Column(DateTime, default=datetime.datetime.utcnow)
 
 
 Base.metadata.create_all(bind=engine)
