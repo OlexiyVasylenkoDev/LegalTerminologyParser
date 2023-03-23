@@ -1,1 +1,2 @@
 # LegalTerminologyParser
+## Install
