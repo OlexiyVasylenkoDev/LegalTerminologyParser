@@ -7,7 +7,7 @@ class PageNotAccessible(Exception):
         self._response = response
 
     def __str__(self):
-        return "Sorry, page is not accessible!"
+        return "Сторінка недоступна"
 
     @property
     def status_code(self) -> int:
@@ -23,7 +23,7 @@ class TermNotFound(Exception):
         self._term = term
 
     def __str__(self) -> str:
-        return f"Sorry, {self._term} wasn`t found!"
+        return f"Не вдалось знайти термін \"{self._term}\" в законодавстві"
 
     @property
     def term(self) -> str:
@@ -35,7 +35,7 @@ class TooManyResults(Exception):
         self._term = term
 
     def __str__(self) -> str:
-        return f"Sorry, there are too many results for {self._term} found!"
+        return f"Знайдено занадто багато результатів для \"{self._term}\". Спробуйте уточнити Ваш пошук"
 
     @property
     def term(self) -> str:

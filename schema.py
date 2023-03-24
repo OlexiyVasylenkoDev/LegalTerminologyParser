@@ -2,7 +2,7 @@ import datetime
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, Column, DateTime, Integer, String, ForeignKey
+from sqlalchemy import create_engine, Column, DateTime, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 load_dotenv()
@@ -24,6 +24,7 @@ class Law(Base):
     name = Column(String)
     terms = relationship("Term", back_populates="law")
     number_of_mentions = Column(Integer, default=1)
+    in_force = Column(Boolean)
 
 
 class Term(Base):
