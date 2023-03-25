@@ -2,8 +2,9 @@ import datetime
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, Column, DateTime, Integer, String, ForeignKey, Boolean
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
+                        create_engine)
+from sqlalchemy.orm import DeclarativeBase, relationship
 
 load_dotenv()
 
@@ -30,7 +31,9 @@ class Law(Base):
 class Term(Base):
     __tablename__ = "Terms"
     id = Column(Integer, primary_key=True)
-    content = Column(String)
+    name = Column(String)
+    definition = Column(String)
+    law_name = Column(String)
     law_id = Column(Integer, ForeignKey("Laws.id"))
     law = relationship("Law", back_populates="terms")
     date_created = Column(DateTime, default=datetime.datetime.utcnow)
