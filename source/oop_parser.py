@@ -20,8 +20,6 @@ class Parser:
     SOUP_FOR_INITIAL_SEARCH = "ul.m-3 li a"
     SOUP_FOR_RETRIEVING_FROM_TERM = "div.card dl"
     SOUP_FOR_COUNTING_NUMBER_OF_RESULTS = "h2.mb-0 b"
-    SOUP_FOR_CHECKING_IF_LAW_IS_VALID = "div.doc span"
-    SOUP_FOR_CHECKING_IF_LAW_IS_INVALID = "span.invalid"
 
     def __init__(self, message: str):
         self.message = message
