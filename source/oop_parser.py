@@ -20,6 +20,8 @@ class Parser:
     SOUP_FOR_INITIAL_SEARCH = "ul.m-3 li a"
     SOUP_FOR_RETRIEVING_FROM_TERM = "div.card dl"
     SOUP_FOR_COUNTING_NUMBER_OF_RESULTS = "h2.mb-0 b"
+    SOUP_FOR_CHECKING_IF_LAW_IS_VALID = "div.doc span"
+    SOUP_FOR_CHECKING_IF_LAW_IS_INVALID = "span.invalid"
 
     def __init__(self, message: str):
         self.message = message
@@ -46,6 +48,18 @@ class Parser:
         return " ".join([i.capitalize() for i in self.message.split(" ")]).lower() \
                in list(map(lambda x: x.lower(), self.get_url_links().keys()))
 
+    def law_is_in_force(self, link):
+        link = link.split("/ed")
+        response = requests.get(link[0])
+        soup = BeautifulSoup(response.text, "html.parser")
+        try:
+            result = soup.find('span', class_=re.compile(r'.*valid\b'))
+            return result.text
+        except (AttributeError, PageNotAccessible):
+            return "DELETED"
+
+        # return link[0]
+
     def parse(self):
         result = dict()
         soup = BeautifulSoup(self.get_response().text, "html.parser")
@@ -56,8 +70,10 @@ class Parser:
             response = requests.get(j[1])
             soup = BeautifulSoup(response.text, "html.parser")
             for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
-                print(i)
+                law_in_force = self.law_is_in_force(i.select_one("div.doc a").get("href"))
                 result[re.sub(r"\xa0", "", i.select_one("div.doc a").text)] = [list(j)[0],
                                                                                re.sub("\n", "", i.select_one("p").text),
-                                                                               i.select_one("div.doc a").get("href")]
+                                                                               i.select_one("div.doc a").get("href"),
+                                                                               law_in_force]
+        print(result)
         return result.items()

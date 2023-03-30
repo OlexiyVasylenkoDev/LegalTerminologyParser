@@ -25,13 +25,14 @@ class Law(Base):
     name = Column(String)
     terms = relationship("Term", back_populates="law")
     number_of_mentions = Column(Integer, default=1)
-    in_force = Column(Boolean)
+    is_valid = Column(String)
+    date_created = Column(DateTime, default=datetime.datetime.utcnow)
 
 
 class Term(Base):
     __tablename__ = "Terms"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    term_name = Column(String)
     definition = Column(String)
     law_name = Column(String)
     law_id = Column(Integer, ForeignKey("Laws.id"))

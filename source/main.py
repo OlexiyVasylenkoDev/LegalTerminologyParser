@@ -40,12 +40,13 @@ async def handler(message: types.Message):
     try:
         parser = Parser(message=translate_message(message.text))
         parsed_term = parser.parse()
+        # TODO: Fix bug with A1
         number_of_results = len(parsed_term)
 
-        await connector(bot, user_id, parsed_term, number_of_results, keyboard)
+        await connector(message.text, bot, user_id, parsed_term, number_of_results, keyboard)
 
         if number_of_results > 1:
-            await message.answer(f"Ось, що ми знайшли за запитом \"{parser.message}\"", reply_markup=keyboard)
+            await message.answer(f"Ось, що вдалось знайти за запитом \"{parser.message}\"", reply_markup=keyboard)
 
     except (PageNotAccessible, TermNotFound, TooManyResults) as e:
         await bot.send_message(chat_id=user_id, text=str(e))
@@ -63,4 +64,4 @@ async def answer(call):
 if __name__ == "__main__":
     executor.start_polling(dp)
 
-# TODO: Fix bug with translation in error representation and add functionality for checking if law is in force
+# TODO: Fix bug with translation in error representation and pagination
