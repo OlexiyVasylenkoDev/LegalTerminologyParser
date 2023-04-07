@@ -22,7 +22,8 @@ class Base(DeclarativeBase):
 class Law(Base):
     __tablename__ = "Laws"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    law_name = Column(String)
+    law_number = Column(String)
     terms = relationship("Term", back_populates="law")
     number_of_mentions = Column(Integer, default=1)
     is_valid = Column(String)

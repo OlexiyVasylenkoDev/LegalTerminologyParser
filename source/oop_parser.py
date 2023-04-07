@@ -8,20 +8,27 @@ from exceptions import PageNotAccessible, TermNotFound, TooManyResults
 from requests import Response
 
 
-class Parser:
-    """
-    The Creator class declares the factory method that is supposed to return an
-    object of a Product class. The Creator's subclasses usually provide the
-    implementation of this method.
-    """
+class Term:
+    def __init__(self, definition, name, law_name, link_to_law, law_number, law_is_valid):
+        self.definition = definition
+        self.name = name
+        self.law_name = law_name
+        self.link_to_law = link_to_law
+        self.law_number = law_number
+        self.law_is_valid = law_is_valid
 
+    def __str__(self):
+        return self.name
+
+
+class Parser:
     URL = "https://zakon.rada.gov.ua/laws/term?find=1&text="
 
     SOUP_FOR_INITIAL_SEARCH = "ul.m-3 li a"
     SOUP_FOR_RETRIEVING_FROM_TERM = "div.card dl"
     SOUP_FOR_COUNTING_NUMBER_OF_RESULTS = "h2.mb-0 b"
 
-    def __init__(self, message: str):
+    def __init__(self, message: str) -> None:
         self.message = message
 
     def get_url(self) -> str:
@@ -46,32 +53,56 @@ class Parser:
         return " ".join([i.capitalize() for i in self.message.split(" ")]).lower() \
                in list(map(lambda x: x.lower(), self.get_url_links().keys()))
 
-    def law_is_in_force(self, link):
+    def get_law_info(self, link: str):
         link = link.split("/ed")
         response = requests.get(link[0])
         soup = BeautifulSoup(response.text, "html.parser")
+        law_info = {"number": None,
+                    "is_valid": None}
+        if not response.status_code <= 400:
+            law_info["number"] = law_info["is_valid"] = "сторінку не знайдено"
+
         try:
-            result = soup.find('span', class_=re.compile(r'.*valid\b'))
-            return result.text
-        except (AttributeError, PageNotAccessible):
-            return "DELETED"
+            law_number = soup.select_one("abbr").text
+            law_info["number"] = law_number
+        except AttributeError:
+            law_info["number"] = "невідомо"
 
-        # return link[0]
+        try:
+            law_is_valid = soup.find('span', class_=re.compile(r'.*valid\b')).text
+            law_info["is_valid"] = law_is_valid
 
-    def parse(self):
-        result = dict()
+        except AttributeError:
+            law_info["is_valid"] = "невідомо"
+
+        return law_info
+
+    def parse(self) -> list[Term]:
+        result = list()
         soup = BeautifulSoup(self.get_response().text, "html.parser")
         number_of_results = soup.select_one(self.SOUP_FOR_COUNTING_NUMBER_OF_RESULTS)
-        if number_of_results is None or int(number_of_results.get_text()) > 10:
+        if number_of_results is None or int(number_of_results.get_text()) > 100:
             raise TooManyResults(term=self.message)
         for j in list(self.get_url_links().items()):
+            print(j)
             response = requests.get(j[1])
             soup = BeautifulSoup(response.text, "html.parser")
             for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
-                law_in_force = self.law_is_in_force(i.select_one("div.doc a").get("href"))
-                result[re.sub(r"\xa0", "", i.select_one("div.doc a").text)] = [list(j)[0],
-                                                                               re.sub("\n", "", i.select_one("p").text),
-                                                                               i.select_one("div.doc a").get("href"),
-                                                                               law_in_force]
-        print(result)
-        return result.items()
+                definition = re.sub("\n", "", i.select_one("p").text)
+                name = list(j)[0]
+                law_name = re.sub(r"\xa0", "", i.select_one("div.doc a").text)
+                link_to_law = i.select_one("div.doc a").get("href")
+                law_info = self.get_law_info(link_to_law)
+
+                parsed_term = Term(definition=definition,
+                                   name=name,
+                                   law_name=law_name,
+                                   link_to_law=link_to_law,
+                                   law_number=law_info["number"],
+                                   law_is_valid=law_info["is_valid"], )
+
+                result.append(parsed_term)
+
+            if self.is_exact_match():
+                break
+        return result

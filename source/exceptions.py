@@ -7,7 +7,7 @@ class PageNotAccessible(Exception):
         self._response = response
 
     def __str__(self):
-        return "Сторінка недоступна"
+        return "сторінку не знайдено"
 
     @property
     def status_code(self) -> int:
