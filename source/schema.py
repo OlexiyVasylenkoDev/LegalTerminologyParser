@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
-                        create_engine)
+                        create_engine, VARCHAR)
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 load_dotenv()
@@ -21,9 +21,8 @@ class Base(DeclarativeBase):
 
 class Law(Base):
     __tablename__ = "Laws"
-    id = Column(Integer, primary_key=True)
     law_name = Column(String)
-    law_number = Column(String)
+    law_number = Column(String, primary_key=True)
     terms = relationship("Term", back_populates="law")
     number_of_mentions = Column(Integer, default=1)
     is_valid = Column(String)
@@ -36,7 +35,7 @@ class Term(Base):
     term_name = Column(String)
     definition = Column(String)
     law_name = Column(String)
-    law_id = Column(Integer, ForeignKey("Laws.id"))
+    law_id = Column(VARCHAR, ForeignKey("Laws.law_number"))
     law = relationship("Law", back_populates="terms")
     date_created = Column(DateTime, default=datetime.datetime.utcnow)
 

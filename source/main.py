@@ -33,7 +33,7 @@ async def bot_handler(message: types.Message):
         parsed_term = parser.parse()
         number_of_results = len(parsed_term)
 # 1
-        await backend.backend(bot, user_id, parsed_term, number_of_results, keyboard)
+        await backend.connector(bot, user_id, parsed_term, number_of_results, keyboard)
 
         if number_of_results > 1:
             await message.answer(f"Ось, що вдалось знайти за запитом \"{parser.message}\"",
@@ -58,7 +58,7 @@ async def pagination_callback(query: types.CallbackQuery = None):
 @dp.callback_query_handler()
 async def answer_callback(call):
     with Session(schema.engine) as session:
-        term = session.query(schema.Term).filter_by(id=call.data).first()
+        term = session.get(schema.Term, call.data)
         await bot.send_message(chat_id=call.message.chat.id,
                                text=f"{check_if_term_is_valid(term)} {term.definition}",
                                parse_mode="HTML")
