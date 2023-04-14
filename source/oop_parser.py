@@ -9,16 +9,16 @@ from requests import Response
 
 
 class Term:
-    def __init__(self, definition, name, law_name, link_to_law, law_number, law_is_valid):
+    def __init__(self, definition, term_name, law_name, link_to_law, law_number, law_is_valid):
         self.definition = definition
-        self.name = name
+        self.term_name = term_name
         self.law_name = law_name
         self.link_to_law = link_to_law
         self.law_number = law_number
         self.law_is_valid = law_is_valid
 
     def __str__(self):
-        return self.name
+        return self.term_name
 
 
 class Parser:
@@ -89,13 +89,13 @@ class Parser:
             soup = BeautifulSoup(response.text, "html.parser")
             for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
                 definition = re.sub("\n", "", i.select_one("p").text)
-                name = list(j)[0]
+                term_name = list(j)[0]
                 law_name = re.sub(r"\xa0", "", i.select_one("div.doc a").text)
                 link_to_law = i.select_one("div.doc a").get("href")
                 law_info = self.get_law_info(link_to_law)
 
                 parsed_term = Term(definition=definition,
-                                   name=name,
+                                   term_name=term_name,
                                    law_name=law_name,
                                    link_to_law=link_to_law,
                                    law_number=law_info["number"],
