@@ -17,6 +17,7 @@ bot = Bot(token=os.environ.get("TOKEN"))
 dp = Dispatcher(bot=bot)
 backend = Backend()
 
+# CODE REVIEW
 
 @dp.message_handler(commands=["start"])
 async def start_handler(message: types.Message):
