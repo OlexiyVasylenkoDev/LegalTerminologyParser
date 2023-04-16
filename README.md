@@ -1,4 +1,5 @@
 # LegalTerminologyParser
+Code review
 This is a GitHub repository that contains a collection of files and folders. The purpose of this repository is to showcase a project or set of projects that are related to a specific topic or subject.
 
 Table of Contents:
