@@ -1,4 +1,4 @@
-![visitor badge](https://visitor-badge.glitch.me/badge?page_id=CodeReviewTutorial.LegalTerminologyParser)
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FCodeReviewTutorial%2FLegalTerminologyParser&label=Visitors&countColor=%23ff8a65&style=flat-square)
 
 # Code review of a GitHub repository. Tutorial
 
