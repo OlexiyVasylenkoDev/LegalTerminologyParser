@@ -1,3 +1,5 @@
+![visitor badge](https://visitor-badge.glitch.me/badge?page_id=CodeReviewTutorial.LegalTerminologyParser)
+
 # Code review of a GitHub repository. Tutorial
 
 ### Table of contents
