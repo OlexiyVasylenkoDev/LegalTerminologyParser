@@ -2,8 +2,8 @@
 
 ### Table of contents
 
-* [Code Review](code review)
-* [Branch Protection](branch protection)
+* [Code Review](#code review)
+* [Branch Protection](#branch protection)
 
 ## Code Review
 
