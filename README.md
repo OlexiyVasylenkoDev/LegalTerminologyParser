@@ -60,7 +60,7 @@
    repo. This is due to protection rules, which you can set in your branches' settings. Let me show you how. First, you
    need to go to your repository settings and select "Branches".
 
-![8](img/8.png)
+![8](img/8.PNG)
 
 2. Next, you should click on "Add branch protection rules".
 
@@ -70,9 +70,9 @@
    there is only one branch "main", but you can either protect your branch or to create a specific branch for this
    code review. Remember that the protection rules should be set for every branch independently.
 
-![10](img/10.png)
+![10](img/10.PNG)
 
 4. Finally, you need to scroll down till "Protect matching branch" section and check the boxes as shown on the
    screenshot. It will be enough to protect the branch from unexpected consequences during code review.
 
-![11](img/11.png)
+![11](img/11.PNG)
