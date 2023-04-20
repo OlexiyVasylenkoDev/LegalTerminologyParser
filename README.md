@@ -13,4 +13,4 @@ To clone the repository, use the following command in your terminal:
 
 
 ## License
-This repository is licensed under the MIT License. See the [LICENSE](#https://github.com/OlexiyVasylenkoDev/LegalTerminologyParser/blob/0cf80243e193606b89c7597a45f1e8adb2417928/LICENSE) file for more information.
+This repository is licensed under the MIT License. See the [LICENSE](https://github.com/OlexiyVasylenkoDev/LegalTerminologyParser/blob/0cf80243e193606b89c7597a45f1e8adb2417928/LICENSE) file for more information.
