@@ -1,13 +1,12 @@
 # Legal Terminology Parser
 
-This is a repository for Django-based web application, Volunteering Hub, which is a platform that connects users who
-need help with volunteers who can provide assistance.
+This repository contains the Telegram Bot for searching definitions of terms in Ukrainian legislation.
 
 ## Table of Contents:
 
 * [Technologies](#technologies)
 * [Installation](#installation)
-* [Additional features](#additional-features)
+* [Usage](#usage)
 * [License](#License)
 
 ## Technologies:
@@ -19,8 +18,8 @@ need help with volunteers who can provide assistance.
 
 ## Installation
 
-First you need to create a new bot.
-To set up a new bot, you will need to talk to BotFather. No, he’s not a person – he’s also a bot, and he's the boss of
+First you need to set up a new bot.
+To do it, you will need to talk to BotFather. No, he’s not a person – he’s also a bot, and he's the boss of
 all the Telegram bots.
 
 Search for `@botfather` in Telegram.
@@ -40,7 +39,10 @@ Note: Make sure you store the token securely. Anyone with your token access can 
 
 In our case, we will store token in `.env` file
 
-This part is taken from: https://www.freecodecamp.org/news/how-to-create-a-telegram-bot-using-python/
+This part is taken from
+the [freecodecamp tutorial](https://www.freecodecamp.org/news/how-to-create-a-telegram-bot-using-python/).
+
+---
 
 After the bot is created, you can start working with the code.
 
@@ -61,8 +63,7 @@ To activate the virtual environment run:
 * On Windows: `venv\Scripts\activate`
 
 If you activated the virtual environment successfully, you will see the virtual environment name in your terminal
-prompt.
-Just like this:
+prompt. Like this:
 
 ![venv-activated](img/venv-activated.PNG)
 
@@ -85,26 +86,30 @@ PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=admin
 ```
 
-You can run this project either simply on your local machine or with docker. To start it in docker, you will need to
-change `POSTGRES_HOST` in `.env` file to `postgres`.
+To run the project, use the following commands:
 
-To run it on your local machine, just run `python source/main.py`.
+* On your local machine: `python source/main.py`
+* With Docker: `docker-compose up --build`
 
 To run it with Docker, you will obviously need to have Docker and Docker Compose installed on your local machine. If you
 don't have
 them installed yet, you can follow the instructions [here](https://docs.docker.com/compose/install/)!
 
-Once you have Docker and Docker Compose installed, you can run the following command:
+Once you have Docker and Docker Compose installed, you need to change the `POSTGRES_HOST` variable in the `.env` file to
+the name of your docker-compose postgres service.
+https://github.com/OlexiyVasylenkoDev/LegalTerminologyParser/blob/ac034b2c08395fcaeed80f1bbe933069dc689c4a/docker-compose.yml#L10-L11
+
+As you can see, my service is called `database`, therefore, it will look like this: `POSTGRES_HOST=database`.
+
+Finally, you can run the following command:
 `docker-compose up --build`.
 
-This will start the application and all its dependencies in Docker containers.
-Once the containers are up and running, you can access the application in your web browser at `http://localhost`. That's
-it!
+This will start the bot with database in Docker containers.
+Once the containers are up and running, you can go to Telegram and use your bot!
 
 ## Usage
 
-This bot has pretty simple functionality.
-It has only three message handlers, which you can see in the table below:
+The bot three message handlers:
 
 | Command | Description                                                                         |
 |---------|-------------------------------------------------------------------------------------|
@@ -117,10 +122,10 @@ There are also two callback handlers:
 | Callback            | Description                                                             |
 |---------------------|-------------------------------------------------------------------------|
 | pagination_callback | Creates keyboard with multiple pages according to number of terms found |
-| answer_callback     | Gets term from database according to th button clicked on keyboard      |
+| answer_callback     | Gets term from database according to the button clicked on keyboard     |
 
 ## License
 
 This repository is licensed under the MIT License. See
-the [LICENSE](#https://github.com/OlexiyVasylenkoDev/LegalTerminologyParser/blob/0cf80243e193606b89c7597a45f1e8adb2417928/LICENSE)
+the [LICENSE](https://github.com/OlexiyVasylenkoDev/LegalTerminologyParser/blob/0cf80243e193606b89c7597a45f1e8adb2417928/LICENSE)
 file for more information.

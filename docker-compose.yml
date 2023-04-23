@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
 
-  postgres:
+  database:
     image: postgres
     container_name: postgres
     ports:

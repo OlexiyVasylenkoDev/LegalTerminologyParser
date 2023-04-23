@@ -11,7 +11,7 @@ class Backend:
     buttons = []
 
     async def connector(self, bot, user_id, parsed_term, number_of_results, keyboard):
-        self.buttons.clear()
+        self.buttons = []
         for term in parsed_term:
             definition = f"{term.definition}\n<i>{hlink(term.law_name, term.link_to_law)}</i>"
 
