@@ -2,7 +2,7 @@ import datetime
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
+from sqlalchemy import (Column, DateTime, ForeignKey, Integer, String,
                         create_engine, VARCHAR)
 from sqlalchemy.orm import DeclarativeBase, relationship
 

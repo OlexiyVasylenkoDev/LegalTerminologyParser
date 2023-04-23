@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 from oop_parser import PageNotAccessible, Parser, TermNotFound, TooManyResults
 from sqlalchemy.orm import Session
 
-from source import schema
-from source.pagination import Paginator
-from source.utils import check_if_term_is_valid
+import schema
+from pagination import Paginator
+from utils import check_if_term_is_valid
 
 load_dotenv()
 

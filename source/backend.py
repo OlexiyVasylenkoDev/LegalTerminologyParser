@@ -3,8 +3,8 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.markdown import hlink
 from sqlalchemy.orm import Session
 
-from source.utils import check_if_term_is_valid
-from source.pagination import NUMBER_OF_KEYBOARD_BUTTONS, Paginator
+from utils import check_if_term_is_valid
+from pagination import NUMBER_OF_KEYBOARD_BUTTONS, Paginator
 
 
 class Backend:
