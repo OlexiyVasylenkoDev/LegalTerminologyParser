@@ -77,6 +77,12 @@ class Parser:
 
         return law_info
 
+    def get_term_definition(self, term):
+        try:
+            return re.sub("\n", "", term.select_one("p").text)
+        except AttributeError:
+            return ""
+
     def parse(self) -> list[Term]:
         result = list()
         soup = BeautifulSoup(self.get_response().text, "html.parser")
@@ -88,7 +94,7 @@ class Parser:
             response = requests.get(j[1])
             soup = BeautifulSoup(response.text, "html.parser")
             for i in soup.select(self.SOUP_FOR_RETRIEVING_FROM_TERM):
-                definition = re.sub("\n", "", i.select_one("p").text)
+                definition = self.get_term_definition(i)
                 term_name = list(j)[0]
                 law_name = re.sub(r"\xa0", "", i.select_one("div.doc a").text)
                 link_to_law = i.select_one("div.doc a").get("href")
