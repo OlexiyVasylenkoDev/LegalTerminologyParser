@@ -1,6 +1,6 @@
 # Legal Terminology Parser
 
-This repository contains the Telegram Bot for searching definitions of terms in Ukrainian legislation.
+This repository contains the Telegram Bot for searching definitions of terms in Ukrainian legislation. The bot is designed with aiogram framework. By providing quick and easy access to legal definitions, this Bot can be a useful tool for legal professionals, law students, or anyone else who needs to navigate through Ukrainian law.
 
 ## Table of Contents:
 
